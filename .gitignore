@@ -1,0 +1,43 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Sphinx build
+docs/build/
+
+# Packaging metadata
+*.egg-info/
+
+# JAX compilation cache (if using)
+jax-cache/
+*.jaxlib
+
+# Virtual environments
+.venv/
+env/
+venv/
+ENV/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# pytest
+.pytest_cache/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# VS Code settings
+.vscode/
+
+# macOS
+.DS_Store
+
+# large data files
+data/*.txt
+data/*.h5
