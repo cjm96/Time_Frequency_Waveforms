@@ -3,16 +3,47 @@
 </p>
 
 
-# Time_Frequency_Waveforms
+# TimeFrequencyWaveforms
 
-A fast, JAX-based Python package to take WDM wavelet transforms of time or frequency domain gravitational waveforms
-
-👉 https://cjm96.github.io/WDM_GW_wavelets/
+A fast, JAX-based Python package to take WDM wavelet transforms of time or frequency domain gravitational waveforms.
 
 
 # Getting Started
 
+To install the package, clone the repository and use pip.
+Run the following in the directory containing pyproject.toml.
+
+```bash
+pip install -e .
+```
+
+In Python you should then be able to `import TimeFrequencyWaveforms`.
+Try running the example notebook `getting_started.ipynb`.
+
+
 # Documentation
+
+Documentation is built using `sphinx`.
+You will need to ensure you have this installed; this can be done by installing with the docs extras.
+
+```bash
+pip install .[docs]
+```
+
+Build the docs by running the following command.
+
+```bash
+cd ./docs
+make clean
+make html
+```
+
+Open the local documentation files using your browser.
+
+``` bash
+open ./docs/build/html/index.html
+```
+
 
 # Testing
 
@@ -26,7 +57,7 @@ pip install .[dev]
 ```
 
 You will then be able to run all the tests. 
-(Make sure you are in the directory cotaining the pyproject.toml file.)
+(Make sure you are in the directory containing the pyproject.toml file.)
 
 ```bash
 python -m pytest
@@ -40,4 +71,6 @@ Christopher J. Moore
 
 # TO DO
 
- - ?
+ - Add waveform processing implementations
+ - Add example notebooks
+ - Expand documentation

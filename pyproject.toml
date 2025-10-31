@@ -1,0 +1,43 @@
+[project]
+name = "TimeFrequencyWaveforms"
+version = "0.0.1"
+authors = [
+  { name="Christopher J. Moore", email="cjm96@cam.ac.uk"},
+]
+description = "A fast, JAX-based Python package to take WDM wavelet transforms of time or frequency domain gravitational waveforms"
+readme = "README.md"
+license = { file="LICENSE" }
+requires-python = ">=3.11"
+dependencies = [
+    "numpy",
+    "scipy",
+    "matplotlib",
+    "jax",
+    "ipykernel",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "astropy",
+]
+
+docs = [
+    "sphinx>=7.0",
+    "sphinx-rtd-theme",
+    "sphinx-autobuild",
+    "myst-parser",
+    "sphinx-autodoc-typehints",
+]
+
+[tool.setuptools]
+packages = ["TimeFrequencyWaveforms"]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
