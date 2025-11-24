@@ -6,3 +6,4 @@ from .code.utils import utils
 from .code.plotting import plotting
 
 from .code.waveforms import waveforms
+from .code.waveforms import new_waveforms

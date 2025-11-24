@@ -35,8 +35,8 @@ docs = [
     "sphinx-autodoc-typehints",
 ]
 
-[tool.setuptools]
-packages = ["TimeFrequencyWaveforms"]
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [build-system]
 requires = ["setuptools>=61.0"]
