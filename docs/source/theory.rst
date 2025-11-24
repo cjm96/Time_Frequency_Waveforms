@@ -73,10 +73,10 @@ discussion in Ref. [1]_.
 
 
 Fast Wavelet Transform (TD :math:`\rightarrow` TFD)
-------------
+---------------------------------------------------
 
 Fast Wavelet Transform (FD :math:`\rightarrow` TFD)
-------------
+---------------------------------------------------
 
 References
 ----------
