@@ -60,7 +60,7 @@ You will first need to ensure you have this installed; this can be done by insta
 pip install .[dev]
 ```
 
-You will then be able to run all the tests. 
+You will then be able to run all the tests.  
 (Make sure you are in the directory containing the pyproject.toml file.)
 
 ```bash
