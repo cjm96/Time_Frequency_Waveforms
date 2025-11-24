@@ -1,3 +1,8 @@
+# -- Path setup --------------------------------------------------------------
+import os
+import sys
+sys.path.insert(0, os.path.abspath('../../src'))
+
 # -- Project information -----------------------------------------------------
 project = 'TimeFrequencyWaveforms'
 copyright = '2025, Christopher J. Moore'
@@ -9,9 +14,23 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
-    "sphinx.ext.napoleon",
-    "nbsphinx",
+    'sphinx.ext.napoleon',
+    'sphinx.ext.autosummary',
+    'sphinx_autodoc_typehints',
+    'nbsphinx',
 ]
+
+# Autodoc settings
+autodoc_default_options = {
+    'members': True,
+    'member-order': 'bysource',
+    'special-members': '__init__',
+    'undoc-members': True,
+    'show-inheritance': True,
+}
+
+# Generate autosummary pages
+autosummary_generate = True
 
 math_number_all = True
 
