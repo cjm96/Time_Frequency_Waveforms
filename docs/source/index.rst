@@ -30,6 +30,9 @@ The project lives on `GitHub <https://github.com/cjm96/Time_Frequency_Waveforms>
    :maxdepth: 7
    :caption: Package Contents:
 
+   api/TimeFrequencyWaveforms.code.utils.rst
+   api/TimeFrequencyWaveforms.code.TD_to_TFD_transform.rst
+   
 
 .. toctree::
    :maxdepth: 5
