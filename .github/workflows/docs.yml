@@ -40,6 +40,18 @@ jobs:
           # Optional: fail build on warnings:
           # sphinx-build -W -b html docs/source _build/html
 
+      - name: Verify build output
+        run: |
+          echo "Checking _build/html contents:"
+          ls -la _build/html/
+          if [ ! -f _build/html/index.html ]; then
+            echo "ERROR: index.html not found!"
+            exit 1
+          fi
+
+      - name: Add .nojekyll file
+        run: touch _build/html/.nojekyll
+
       - name: Deploy to GitHub Pages (gh-pages branch)
         uses: peaceiris/actions-gh-pages@v3
         with:
