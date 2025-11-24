@@ -25,6 +25,8 @@ Try running the example notebook `getting_started.ipynb`.
 
 # Documentation
 
+👉 [https://cjm96.github.io/Time_Frequency_Waveforms/](https://cjm96.github.io/Time_Frequency_Waveforms/)
+
 Documentation is built using `sphinx`.
 You will need to ensure you have this installed; this can be done by installing with the docs extras.
 
