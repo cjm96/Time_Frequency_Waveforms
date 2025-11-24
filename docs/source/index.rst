@@ -1,45 +1,41 @@
 TimeFrequencyWaveforms Documentation
 ====================================
 
-A fast, JAX-based Python package to take WDM wavelet transforms of time or frequency domain gravitational waveforms.
+Author: Christopher J. Moore
+
+A fast, JAX-based Python package to take the wavelet transforms of harmonic-based GW waveform model.
+
+Two types of transform are possible: one that transforms from the time-domain (TD) to the time-frequency domain (TFD),
+i.e. the TD :math:`\rightarrow` TFD transform; and  another that transforms from the frequency-domain (FD) to the 
+time-frequency domain (TFD); i.e. the FD :math:`\rightarrow` TFD transform.
+Currenlty, only the TD :math:`\rightarrow` TFD transform is implemented.
+
+The project lives on `GitHub <https://github.com/cjm96/Time_Frequency_Waveforms>`_.
+
+
+.. image:: ../../logo_images/logo.png
+  :align: center
+  :width: 400
+  :alt: Alternative text
+
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 5
+   :caption: Mathematical Background:
 
-   installation
-   quickstart
-   api
+   theory
 
-Installation
-------------
 
-To install the package, clone the repository and use pip:
+.. toctree::
+   :maxdepth: 7
+   :caption: Package Contents:
 
-.. code-block:: bash
+   api/TimeFrequencyWaveforms.code.utils.rst
+   api/TimeFrequencyWaveforms.code.TD_to_TFD_transform.rst
+   examples
 
-   pip install -e .
+.. toctree::
+   :maxdepth: 5
+   :caption: Code Repository:
 
-Quick Start
------------
-
-Import the package in Python:
-
-.. code-block:: python
-
-   import TimeFrequencyWaveforms as TFW
-
-API Reference
--------------
-
-.. automodule:: TimeFrequencyWaveforms
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   GitHub

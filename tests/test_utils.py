@@ -4,7 +4,7 @@ Test suite for utility functions.
 
 import pytest
 import jax.numpy as jnp
-from TimeFrequencyWaveforms.code.utils import utils
+from TimeFrequencyWaveforms.code import utils
 
 
 def test_example_function():
