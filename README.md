@@ -67,10 +67,3 @@ python -m pytest
 # Authors
 
 Christopher J. Moore
-
-
-# TO DO
-
- - Add waveform processing implementations
- - Add example notebooks
- - Expand documentation
