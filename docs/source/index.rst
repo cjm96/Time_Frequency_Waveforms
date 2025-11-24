@@ -32,6 +32,7 @@ The project lives on `GitHub <https://github.com/cjm96/Time_Frequency_Waveforms>
 
    api/TimeFrequencyWaveforms.code.utils.rst
    api/TimeFrequencyWaveforms.code.TD_to_TFD_transform.rst
+   api/modules.rst
    examples
 
 .. toctree::
