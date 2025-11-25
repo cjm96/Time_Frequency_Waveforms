@@ -1,5 +1,5 @@
 """
-Test suite for utility functions.
+Test suite for the TD to TFD transform
 """
 
 import pytest
