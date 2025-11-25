@@ -8,3 +8,4 @@ The following example notebooks from the repository demonstrate the use of the T
     :maxdepth: 1
     
     getting_started.ipynb
+    emri_example.ipynb
