@@ -1,0 +1,594 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Getting Started &mdash; TimeFrequencyWaveforms 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=aca8e19c" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="EMRI Example with FEW" href="emri_example.html" />
+    <link rel="prev" title="Example Notebooks" href="examples.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            TimeFrequencyWaveforms
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Mathematical Background:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="theory.html">Mathematical Background</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api/TimeFrequencyWaveforms.code.utils.html">TimeFrequencyWaveforms.code.utils module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/TimeFrequencyWaveforms.code.TD_to_TFD_transform.html">TimeFrequencyWaveforms.code.TD_to_TFD_transform module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">TimeFrequencyWaveforms</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="examples.html">Example Notebooks</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="emri_example.html">EMRI Example with FEW</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Code Repository:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="GitHub.html">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">TimeFrequencyWaveforms</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="examples.html">Example Notebooks</a></li>
+      <li class="breadcrumb-item active">Getting Started</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/getting_started.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Getting-Started">
+<h1>Getting Started<a class="headerlink" href="#Getting-Started" title="Link to this heading"></a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">WDM</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">TimeFrequencyWaveforms</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">TFW</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">TimeFrequencyWaveforms.code</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dt</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+<span class="n">Nt</span><span class="p">,</span> <span class="n">Nf</span> <span class="o">=</span> <span class="mi">512</span><span class="p">,</span> <span class="mi">128</span>
+<span class="n">N</span> <span class="o">=</span> <span class="n">Nt</span> <span class="o">*</span> <span class="n">Nf</span>
+
+<span class="n">wdm</span> <span class="o">=</span> <span class="n">WDM</span><span class="o">.</span><span class="n">WDM</span><span class="o">.</span><span class="n">WDM_transform</span><span class="p">(</span><span class="n">dt</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">Nf</span><span class="o">=</span><span class="n">Nf</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">calc_m0</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sampling rate fs = </span><span class="si">{</span><span class="mi">1</span><span class="o">/</span><span class="n">dt</span><span class="si">}</span><span class="s2"> Hz&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Duration T = </span><span class="si">{</span><span class="n">N</span><span class="si">}</span><span class="s2"> s = </span><span class="si">{</span><span class="n">N</span><span class="o">/</span><span class="p">(</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">24</span><span class="p">)</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> days&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wavelet time resolution dT = </span><span class="si">{</span><span class="n">wdm</span><span class="o">.</span><span class="n">dT</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> s = </span><span class="si">{</span><span class="n">wdm</span><span class="o">.</span><span class="n">dT</span><span class="o">/</span><span class="p">(</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="p">)</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> hours&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wavelet frequency resolution dF = </span><span class="si">{</span><span class="mf">1.0e3</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dF</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> mHz&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Sampling rate fs = 1.0 Hz
+Duration T = 65536 s = 0.8 days
+Wavelet time resolution dT = 128.0 s = 0.0 hours
+Wavelet frequency resolution dF = 3.9 mHz
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">m = wdm.Nf//2</span>
+
+<span class="sd">fig, ax = plt.subplots(figsize=(5,4))</span>
+<span class="sd">for i, eps in enumerate([0.1, 0.5, 0.9]):</span>
+<span class="sd">    ax.plot(np.arange(0, wdm.Nt, 2),</span>
+<span class="sd">            [TFW.new_waveforms.cnm(wdm, n, m, (m+eps)*wdm.dF) for n in range(0, wdm.Nt, 2)],</span>
+<span class="sd">            color=&#39;C{}&#39;.format(i), ls=&#39;-&#39;, label=r&#39;$f=f_{\rm ref}+&#39;+f&#39;{eps}&#39;+&#39;\\Delta f$&#39;)</span>
+
+<span class="sd">ax.set_xlim(0, wdm.Nt-1)</span>
+
+<span class="sd">ax.set_xlabel(&#39;Wavelet index n&#39;)</span>
+<span class="sd">ax.set_ylabel(r&#39;$c_{n,m}(f)$&#39;)</span>
+
+<span class="sd">ax.legend(loc=&#39;center right&#39;, frameon=False)</span>
+
+<span class="sd">plt.show()</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&#34;\nm = wdm.Nf//2\n\nfig, ax = plt.subplots(figsize=(5,4))\nfor i, eps in enumerate([0.1, 0.5, 0.9]):\n    ax.plot(np.arange(0, wdm.Nt, 2),\n            [TFW.new_waveforms.cnm(wdm, n, m, (m+eps)*wdm.dF) for n in range(0, wdm.Nt, 2)],\n            color=&#39;C{}&#39;.format(i), ls=&#39;-&#39;, label=r&#39;$f=f_{\\rm ref}+&#39;+f&#39;{eps}&#39;+&#39;\\\\Delta f$&#39;)\n\nax.set_xlim(0, wdm.Nt-1)\n\nax.set_xlabel(&#39;Wavelet index n&#39;)\nax.set_ylabel(r&#39;$c_{n,m}(f)$&#39;)\n\nax.legend(loc=&#39;center right&#39;, frameon=False)\n\nplt.show()\n&#34;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">fig, ax = plt.subplots(figsize=(5,4))</span>
+
+<span class="sd">f_vals = np.linspace(0, 2*wdm.dF, 50)</span>
+
+<span class="sd">f_ref = (wdm.Nf//2)*wdm.dF</span>
+
+<span class="sd">for i, m in enumerate(np.arange(wdm.Nf//2-2, wdm.Nf//2+3)):</span>
+<span class="sd">    ax.plot(f_vals,</span>
+<span class="sd">            [TFW.new_waveforms.cnm(wdm, wdm.Nt//2, m, f+f_ref, fdot=1.0e-5) for f in f_vals],</span>
+<span class="sd">                color=&#39;C{}&#39;.format(i), ls=&#39;-&#39;, label=r&#39;$m={}$&#39;.format(m))</span>
+
+<span class="sd">ax.set_xlim(0, 2*wdm.dF)</span>
+<span class="sd">ax.set_xticks([0, 0.5*wdm.dF, wdm.dF, 1.5*wdm.dF,2*wdm.dF],</span>
+<span class="sd">        labels=[r&#39;$0$&#39;, r&#39;$\Delta f/2$&#39;, r&#39;$\Delta f$&#39;, r&#39;$3\Delta f/2$&#39;, r&#39;$2\Delta f$&#39;])</span>
+
+<span class="sd">ax.set_xlabel(r&#39;Frequency $f-f_{\rm ref}$ [Hz]&#39;)</span>
+<span class="sd">ax.set_ylabel(r&#39;$c_{nm}(f, \dot{f})$&#39;)</span>
+
+<span class="sd">ax.legend(loc=&#39;upper center&#39;, frameon=False)</span>
+
+<span class="sd">plt.show()</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&#34;\nfig, ax = plt.subplots(figsize=(5,4))\n\nf_vals = np.linspace(0, 2*wdm.dF, 50)\n\nf_ref = (wdm.Nf//2)*wdm.dF\n\nfor i, m in enumerate(np.arange(wdm.Nf//2-2, wdm.Nf//2+3)):\n    ax.plot(f_vals,\n            [TFW.new_waveforms.cnm(wdm, wdm.Nt//2, m, f+f_ref, fdot=1.0e-5) for f in f_vals],\n                color=&#39;C{}&#39;.format(i), ls=&#39;-&#39;, label=r&#39;$m={}$&#39;.format(m))\n\nax.set_xlim(0, 2*wdm.dF)\nax.set_xticks([0, 0.5*wdm.dF, wdm.dF, 1.5*wdm.dF,2*wdm.dF], \n        labels=[r&#39;$0$&#39;, r&#39;$\\Delta f/2$&#39;, r&#39;$\\Delta f$&#39;, r&#39;$3\\Delta f/2$&#39;, r&#39;$2\\Delta f$&#39;])\n\nax.set_xlabel(r&#39;Frequency $f-f_{\\rm ref}$ [Hz]&#39;)\nax.set_ylabel(r&#39;$c_{nm}(f, \\dot{f})$&#39;)\n\nax.legend(loc=&#39;upper center&#39;, frameon=False)\n\nplt.show()\n&#34;
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fdot_grid_spec</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.5e-6</span><span class="p">,</span> <span class="mf">1.5e-6</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">transformer</span> <span class="o">=</span> <span class="n">TFW</span><span class="o">.</span><span class="n">code</span><span class="o">.</span><span class="n">TD_to_TFD_transform</span><span class="o">.</span><span class="n">Transformer</span><span class="p">(</span><span class="n">wdm</span><span class="p">,</span> <span class="n">num_freq_points</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">num_pixels</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">fdot_grid_spec</span><span class="o">=</span><span class="n">fdot_grid_spec</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">par</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;phic&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s1">&#39;tc&#39;</span><span class="p">:</span><span class="mf">32768.0</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">:</span><span class="mf">10000.0</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">:</span><span class="mf">0.05</span><span class="p">,</span> <span class="s1">&#39;fdot&#39;</span><span class="p">:</span><span class="mf">1.0e-6</span><span class="p">}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">amplitude</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">par</span><span class="p">):</span>
+    <span class="n">tc</span> <span class="o">=</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;tc&#39;</span><span class="p">]</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;w&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="p">((</span><span class="n">t</span><span class="o">-</span><span class="n">tc</span><span class="p">)</span><span class="o">/</span><span class="n">w</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">phase</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">par</span><span class="p">):</span>
+    <span class="n">tc</span> <span class="o">=</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;tc&#39;</span><span class="p">]</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">]</span>
+    <span class="n">fdot</span> <span class="o">=</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;fdot&#39;</span><span class="p">]</span>
+    <span class="n">phic</span> <span class="o">=</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;phic&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">phic</span> <span class="o">+</span> <span class="mf">2.</span><span class="o">*</span><span class="n">jnp</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">f</span><span class="o">*</span><span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="n">tc</span><span class="p">)</span> <span class="o">+</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">fdot</span><span class="o">*</span><span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="n">tc</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">frequency</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">par</span><span class="p">):</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;f&#39;</span><span class="p">]</span>
+    <span class="n">tc</span> <span class="o">=</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;tc&#39;</span><span class="p">]</span>
+    <span class="n">fdot</span> <span class="o">=</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;fdot&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">f</span> <span class="o">+</span> <span class="n">fdot</span> <span class="o">*</span> <span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="n">tc</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">frequency_deriv</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">par</span><span class="p">):</span>
+    <span class="n">fdot</span> <span class="o">=</span> <span class="n">par</span><span class="p">[</span><span class="s1">&#39;fdot&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">fdot</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">par</span><span class="p">)</span><span class="o">*</span><span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phase</span><span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">par</span><span class="p">)))</span>
+
+<span class="c1"># inset Axes....</span>
+<span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">10500</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.12</span><span class="p">,</span> <span class="mf">0.12</span>  <span class="c1"># subregion of the original image</span>
+<span class="n">axins</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">inset_axes</span><span class="p">(</span>
+    <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">],</span>
+    <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">),</span> <span class="n">xticklabels</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticklabels</span><span class="o">=</span><span class="p">[])</span>
+<span class="n">axins</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">par</span><span class="p">)</span><span class="o">*</span><span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phase</span><span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">par</span><span class="p">)))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">indicate_inset_zoom</span><span class="p">(</span><span class="n">axins</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+
+<span class="c1"># inset Axes....</span>
+<span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="mi">55000</span><span class="p">,</span> <span class="mi">55500</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.12</span><span class="p">,</span> <span class="mf">0.12</span>  <span class="c1"># subregion of the original image</span>
+<span class="n">axins_</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">inset_axes</span><span class="p">(</span>
+    <span class="p">[</span><span class="mf">0.65</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">],</span>
+    <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">),</span> <span class="n">xticklabels</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticklabels</span><span class="o">=</span><span class="p">[])</span>
+<span class="n">axins_</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">par</span><span class="p">)</span><span class="o">*</span><span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phase</span><span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">par</span><span class="p">)))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">indicate_inset_zoom</span><span class="p">(</span><span class="n">axins_</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time [s]&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Signal&quot;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">wdm</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/getting_started_6_0.png" src="_images/getting_started_6_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">t_n</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nt</span><span class="p">)</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dT</span>
+
+<span class="n">A_n</span> <span class="o">=</span> <span class="n">amplitude</span><span class="p">(</span><span class="n">t_n</span><span class="p">,</span> <span class="n">par</span><span class="p">)</span>
+<span class="n">Phi_n</span> <span class="o">=</span> <span class="n">phase</span><span class="p">(</span><span class="n">t_n</span><span class="p">,</span> <span class="n">par</span><span class="p">)</span>
+<span class="n">f_n</span> <span class="o">=</span> <span class="n">frequency</span><span class="p">(</span><span class="n">t_n</span><span class="p">,</span> <span class="n">par</span><span class="p">)</span>
+<span class="n">fdot_n</span> <span class="o">=</span> <span class="n">frequency_deriv</span><span class="p">(</span><span class="n">t_n</span><span class="p">,</span> <span class="n">par</span><span class="p">)</span>
+
+<span class="n">wnm</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">A_n</span><span class="p">,</span> <span class="n">Phi_n</span><span class="p">,</span> <span class="n">f_n</span><span class="p">,</span> <span class="n">fdot_n</span><span class="p">)</span>
+<span class="n">wp</span><span class="p">,</span> <span class="n">wc</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">wnm</span><span class="p">),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">wnm</span><span class="p">)</span>
+<span class="n">tc</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Elapsed time: </span><span class="si">{</span><span class="n">tc</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Elapsed time: 0.31917500495910645 seconds
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">Wp</span> <span class="o">=</span> <span class="n">wdm</span><span class="p">(</span><span class="n">amplitude</span><span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">par</span><span class="p">)</span><span class="o">*</span><span class="n">jnp</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phase</span><span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">par</span><span class="p">)))</span>
+<span class="n">Wc</span> <span class="o">=</span> <span class="n">wdm</span><span class="p">(</span><span class="n">amplitude</span><span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">par</span><span class="p">)</span><span class="o">*</span><span class="n">jnp</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phase</span><span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">par</span><span class="p">)))</span>
+<span class="n">tc</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Elapsed time: </span><span class="si">{</span><span class="n">tc</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Elapsed time: 0.12111616134643555 seconds
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">])</span>
+
+<span class="n">im</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">wp</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">15</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+                <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="n">wdm</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">wdm</span><span class="o">.</span><span class="n">f_Ny</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
+
+<span class="n">im_</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">Wp</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">15</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+                <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="n">wdm</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">wdm</span><span class="o">.</span><span class="n">f_Ny</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im_</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Frequency [Hz]&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time [s]&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time [s]&quot;</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">70000</span><span class="p">,</span> <span class="mi">20000</span><span class="p">))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">70000</span><span class="p">,</span> <span class="mi">20000</span><span class="p">))</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Fast TD$\rightarrow$TFD Transform&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Exact Numerical Transform&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/getting_started_9_0.png" src="_images/getting_started_9_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">wavelet_inner_product</span><span class="p">(</span><span class="n">wdm</span> <span class="p">:</span> <span class="n">WDM</span><span class="o">.</span><span class="n">WDM</span><span class="o">.</span><span class="n">WDM_transform</span><span class="p">,</span>
+                          <span class="n">Anm</span> <span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Bnm</span> <span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                          <span class="n">f_low</span> <span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">f_high</span> <span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                          <span class="n">t_low</span> <span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_high</span> <span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute white TF noise inner product between two signals with wavelet</span>
+<span class="sd">    coefficients Anm and Bnm. This is a sum over the time-frequency grid.</span>
+<span class="sd">    The optional arguments allow this sum to be restricted to a sub-region</span>
+<span class="sd">    of the time-frequency grid.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    wdm : WDM.WDM.WDM_transform</span>
+<span class="sd">        An instance of the WDM wavelet transform class.</span>
+<span class="sd">    Anm : jnp.ndarray</span>
+<span class="sd">        Wavelet coefficients of first signal, shape=(Nt, Nf).</span>
+<span class="sd">    Bnm : jnp.ndarray</span>
+<span class="sd">        Wavelet coefficients of second signal, shape=(Nt, Nf).</span>
+<span class="sd">    f_low : float</span>
+<span class="sd">        Lower frequency bound of inner product. Optional.</span>
+<span class="sd">    f_high : float</span>
+<span class="sd">        Upper frequency bound of inner product. Optional.</span>
+<span class="sd">    t_low : float</span>
+<span class="sd">        Lower time bound of inner product. Optional.</span>
+<span class="sd">    t_high : float</span>
+<span class="sd">        Upper time bound of inner product. Optional.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    AB : float</span>
+<span class="sd">        The inner product.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tn</span> <span class="o">=</span> <span class="n">wdm</span><span class="o">.</span><span class="n">dT</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nt</span><span class="p">)</span>
+    <span class="n">fm</span> <span class="o">=</span> <span class="n">wdm</span><span class="o">.</span><span class="n">dF</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nf</span><span class="p">)</span>
+
+    <span class="n">t_low</span> <span class="o">=</span> <span class="n">t_low</span> <span class="k">if</span> <span class="n">t_low</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mf">0.0</span>
+    <span class="n">t_high</span> <span class="o">=</span> <span class="n">t_high</span> <span class="k">if</span> <span class="n">t_high</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">wdm</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">f_low</span> <span class="o">=</span> <span class="n">f_low</span> <span class="k">if</span> <span class="n">f_low</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mf">0.0</span>
+    <span class="n">f_high</span> <span class="o">=</span> <span class="n">f_high</span> <span class="k">if</span> <span class="n">f_high</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">wdm</span><span class="o">.</span><span class="n">f_Ny</span>
+
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span> <span class="n">jnp</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">tn</span> <span class="o">&gt;</span> <span class="n">t_low</span><span class="p">,</span> <span class="n">tn</span> <span class="o">&lt;</span> <span class="n">t_high</span><span class="p">),</span>
+                      <span class="n">jnp</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">fm</span> <span class="o">&gt;</span> <span class="n">f_low</span><span class="p">,</span> <span class="n">fm</span> <span class="o">&lt;</span> <span class="n">f_high</span><span class="p">)</span> <span class="p">)</span>
+
+    <span class="n">AB</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Anm</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">*</span><span class="n">Bnm</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">AB</span>
+
+<span class="n">edge</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">f_low</span><span class="p">,</span> <span class="n">f_high</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span>
+
+<span class="n">wW</span> <span class="o">=</span> <span class="n">wavelet_inner_product</span><span class="p">(</span><span class="n">wdm</span><span class="p">,</span> <span class="n">wp</span><span class="p">,</span> <span class="n">Wp</span><span class="p">,</span> <span class="n">f_low</span><span class="o">=</span><span class="n">f_low</span><span class="p">,</span> <span class="n">f_high</span><span class="o">=</span><span class="n">f_high</span><span class="p">,</span> <span class="n">t_low</span><span class="o">=</span><span class="n">edge</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dT</span><span class="p">,</span> <span class="n">t_high</span><span class="o">=</span><span class="n">wdm</span><span class="o">.</span><span class="n">T</span><span class="o">-</span><span class="n">edge</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dT</span><span class="p">)</span>
+<span class="n">ww</span> <span class="o">=</span> <span class="n">wavelet_inner_product</span><span class="p">(</span><span class="n">wdm</span><span class="p">,</span> <span class="n">wp</span><span class="p">,</span> <span class="n">wp</span><span class="p">,</span> <span class="n">f_low</span><span class="o">=</span><span class="n">f_low</span><span class="p">,</span> <span class="n">f_high</span><span class="o">=</span><span class="n">f_high</span><span class="p">,</span> <span class="n">t_low</span><span class="o">=</span><span class="n">edge</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dT</span><span class="p">,</span> <span class="n">t_high</span><span class="o">=</span><span class="n">wdm</span><span class="o">.</span><span class="n">T</span><span class="o">-</span><span class="n">edge</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dT</span><span class="p">)</span>
+<span class="n">WW</span> <span class="o">=</span> <span class="n">wavelet_inner_product</span><span class="p">(</span><span class="n">wdm</span><span class="p">,</span> <span class="n">Wp</span><span class="p">,</span> <span class="n">Wp</span><span class="p">,</span> <span class="n">f_low</span><span class="o">=</span><span class="n">f_low</span><span class="p">,</span> <span class="n">f_high</span><span class="o">=</span><span class="n">f_high</span><span class="p">,</span> <span class="n">t_low</span><span class="o">=</span><span class="n">edge</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dT</span><span class="p">,</span> <span class="n">t_high</span><span class="o">=</span><span class="n">wdm</span><span class="o">.</span><span class="n">T</span><span class="o">-</span><span class="n">edge</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dT</span><span class="p">)</span>
+
+<span class="n">MM</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">wW</span><span class="o">/</span><span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ww</span><span class="o">*</span><span class="n">WW</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mismatch = </span><span class="si">{</span><span class="n">MM</span><span class="si">:</span><span class="s2">.2e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Mismatch = 1.49e-04
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">wdm</span><span class="o">.</span><span class="n">idwt</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C0&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+
+<span class="c1"># inset Axes....</span>
+<span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">10500</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.12</span><span class="p">,</span> <span class="mf">0.12</span>  <span class="c1"># subregion of the original image</span>
+<span class="n">axins</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">inset_axes</span><span class="p">(</span>
+    <span class="p">[</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">],</span>
+    <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">),</span> <span class="n">xticklabels</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticklabels</span><span class="o">=</span><span class="p">[])</span>
+<span class="n">axins</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">wdm</span><span class="o">.</span><span class="n">idwt</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C0&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">indicate_inset_zoom</span><span class="p">(</span><span class="n">axins</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+
+<span class="c1"># inset Axes....</span>
+<span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="mi">55000</span><span class="p">,</span> <span class="mi">55500</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.12</span><span class="p">,</span> <span class="mf">0.12</span>  <span class="c1"># subregion of the original image</span>
+<span class="n">axins_</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">inset_axes</span><span class="p">(</span>
+    <span class="p">[</span><span class="mf">0.65</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">],</span>
+    <span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">),</span> <span class="n">xticklabels</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticklabels</span><span class="o">=</span><span class="p">[])</span>
+<span class="n">axins_</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">wdm</span><span class="o">.</span><span class="n">idwt</span><span class="p">(</span><span class="n">wp</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;C0&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">indicate_inset_zoom</span><span class="p">(</span><span class="n">axins_</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time [s]&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Signal&quot;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">wdm</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/getting_started_11_0.png" src="_images/getting_started_11_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">patches</span>
+
+<span class="n">CNM</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">SHATNM</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">cnm_snm</span><span class="p">(</span><span class="n">A_n</span><span class="p">,</span> <span class="n">Phi_n</span><span class="p">,</span> <span class="n">f_n</span><span class="p">,</span> <span class="n">fdot_n</span><span class="p">)</span>
+<span class="n">WNM</span> <span class="o">=</span> <span class="n">transformer</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">A_n</span><span class="p">,</span> <span class="n">Phi_n</span><span class="p">,</span> <span class="n">f_n</span><span class="p">,</span> <span class="n">fdot_n</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">])</span>
+
+<span class="n">M</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">CNM</span><span class="p">)</span>
+<span class="n">M</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nt</span><span class="o">//</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">,:]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">CNM</span><span class="p">[</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nt</span><span class="o">//</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span><span class="p">,:])</span>
+<span class="n">M</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nt</span><span class="o">//</span><span class="mi">2</span><span class="p">,:]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">CNM</span><span class="p">[</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nt</span><span class="o">//</span><span class="mi">2</span><span class="p">,:])</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">M</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">15</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+                <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="n">wdm</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">wdm</span><span class="o">.</span><span class="n">f_Ny</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
+<span class="n">rect</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">(((</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nt</span><span class="o">//</span><span class="mi">2</span><span class="o">-</span><span class="mi">8</span><span class="p">)</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dT</span><span class="p">,</span> <span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nf</span><span class="o">//</span><span class="mi">2</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dF</span><span class="p">),</span> <span class="mi">14</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dT</span><span class="p">,</span> <span class="mi">7</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dF</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>
+
+<span class="n">im_</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">CNM</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">15</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+                <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="n">wdm</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">wdm</span><span class="o">.</span><span class="n">f_Ny</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
+<span class="n">rect</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nf</span><span class="o">//</span><span class="mi">2</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dF</span><span class="p">),</span> <span class="n">wdm</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="mi">7</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dF</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">rect</span><span class="p">)</span>
+
+<span class="n">z_n</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">f_n</span><span class="o">-</span><span class="n">transformer</span><span class="o">.</span><span class="n">f_ref</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dF</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">CNM_shifted</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span> <span class="n">utils</span><span class="o">.</span><span class="n">row_roll</span><span class="p">(</span><span class="n">CNM</span><span class="p">,</span> <span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">z_n</span><span class="p">)</span> <span class="o">+</span>
+                    <span class="n">utils</span><span class="o">.</span><span class="n">row_roll</span><span class="p">(</span><span class="n">CNM</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">z_n</span><span class="p">)</span> <span class="o">+</span>
+                    <span class="n">transformer</span><span class="o">.</span><span class="n">alt</span> <span class="o">*</span> <span class="n">utils</span><span class="o">.</span><span class="n">row_roll</span><span class="p">(</span><span class="n">SHATNM</span><span class="p">,</span> <span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">z_n</span><span class="p">)</span> <span class="o">-</span>
+                    <span class="n">transformer</span><span class="o">.</span><span class="n">alt</span> <span class="o">*</span> <span class="n">utils</span><span class="o">.</span><span class="n">row_roll</span><span class="p">(</span><span class="n">SHATNM</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">z_n</span><span class="p">)</span> <span class="p">)</span>
+<span class="n">im__</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">CNM_shifted</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">15</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+                <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="n">wdm</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">wdm</span><span class="o">.</span><span class="n">f_Ny</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="n">wdm</span><span class="o">.</span><span class="n">T</span><span class="p">],</span>
+                <span class="p">[</span><span class="n">transformer</span><span class="o">.</span><span class="n">f_ref</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">z_n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dF</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dF</span><span class="p">,</span> <span class="n">transformer</span><span class="o">.</span><span class="n">f_ref</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">z_n</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dF</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dF</span><span class="p">],</span>
+                    <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="n">wdm</span><span class="o">.</span><span class="n">T</span><span class="p">],</span>
+                <span class="p">[</span><span class="n">transformer</span><span class="o">.</span><span class="n">f_ref</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">z_n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dF</span><span class="o">+</span><span class="mi">5</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dF</span><span class="p">,</span> <span class="n">transformer</span><span class="o">.</span><span class="n">f_ref</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">z_n</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dF</span><span class="o">+</span><span class="mi">5</span><span class="o">*</span><span class="n">wdm</span><span class="o">.</span><span class="n">dF</span><span class="p">],</span>
+                    <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">im___</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">WNM</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">15</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+                <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="n">wdm</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">wdm</span><span class="o">.</span><span class="n">f_Ny</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im___</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Frequency [Hz]&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time [s]&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time [s]&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time [s]&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time [s]&quot;</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">70000</span><span class="p">,</span> <span class="mi">20000</span><span class="p">))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">70000</span><span class="p">,</span> <span class="mi">20000</span><span class="p">))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">70000</span><span class="p">,</span> <span class="mi">20000</span><span class="p">))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">70000</span><span class="p">,</span> <span class="mi">20000</span><span class="p">))</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Step 3&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Step 4&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Step 5&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Step 6&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/getting_started_12_0.png" src="_images/getting_started_12_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="examples.html" class="btn btn-neutral float-left" title="Example Notebooks" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="emri_example.html" class="btn btn-neutral float-right" title="EMRI Example with FEW" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Christopher J. Moore.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,482 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TimeFrequencyWaveforms.code.TD_to_TFD_transform &mdash; TimeFrequencyWaveforms 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=aca8e19c" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            TimeFrequencyWaveforms
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Mathematical Background:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../theory.html">Mathematical Background</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/TimeFrequencyWaveforms.code.utils.html">TimeFrequencyWaveforms.code.utils module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/TimeFrequencyWaveforms.code.TD_to_TFD_transform.html">TimeFrequencyWaveforms.code.TD_to_TFD_transform module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">TimeFrequencyWaveforms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Example Notebooks</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Code Repository:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../GitHub.html">GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">TimeFrequencyWaveforms</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">TimeFrequencyWaveforms.code.TD_to_TFD_transform</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for TimeFrequencyWaveforms.code.TD_to_TFD_transform</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="n">jax</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;jax_enable_x64&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jax.scipy.interpolate</span><span class="w"> </span><span class="kn">import</span> <span class="n">RegularGridInterpolator</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">TimeFrequencyWaveforms.code</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">WDM</span>
+
+
+<div class="viewcode-block" id="Transformer">
+<a class="viewcode-back" href="../../../api/TimeFrequencyWaveforms.code.TD_to_TFD_transform.html#TimeFrequencyWaveforms.code.TD_to_TFD_transform.Transformer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Transformer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Description. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Transformer.__init__">
+<a class="viewcode-back" href="../../../api/TimeFrequencyWaveforms.code.TD_to_TFD_transform.html#TimeFrequencyWaveforms.code.TD_to_TFD_transform.Transformer.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                 <span class="n">wdm</span> <span class="p">:</span> <span class="n">WDM</span><span class="o">.</span><span class="n">WDM</span><span class="o">.</span><span class="n">WDM_transform</span><span class="p">,</span>
+                 <span class="n">num_freq_points</span> <span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                 <span class="n">fdot_grid_spec</span> <span class="p">:</span> <span class="nb">tuple</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">fddot_grid_spec</span> <span class="p">:</span> <span class="nb">tuple</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">num_pixels</span> <span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        wdm : WDM.WDM</span>
+<span class="sd">            An instance of the WDM wavelet transform class.</span>
+<span class="sd">        num_freq_points : int</span>
+<span class="sd">            Number of frequency points in the interpolation grid. Optional.</span>
+<span class="sd">        fdot_grid_spec : tuple</span>
+<span class="sd">            Specification for fdot grid as (min, max, num_points). Optional.</span>
+<span class="sd">            Default is None, meaning no interpolation over fdot.</span>
+<span class="sd">        fddot_grid_spec : tuple</span>
+<span class="sd">            Specification for fddot grid as (min, max, num_points). Optional.</span>
+<span class="sd">            Default is None, meaning no interpolation over fddot.</span>
+<span class="sd">        num_pixels : int</span>
+<span class="sd">            Number of time pixels to interpolate. If None, then use all Nf </span>
+<span class="sd">            pixels. Optional.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wdm</span> <span class="o">=</span> <span class="n">wdm</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_freq_points</span> <span class="o">=</span> <span class="n">num_freq_points</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_ref</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nt</span> <span class="o">//</span> <span class="mi">4</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m_ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nf</span> <span class="o">//</span> <span class="mi">2</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">f_ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_ref</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="o">.</span><span class="n">dF</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">f_grid_spec</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="o">.</span><span class="n">dF</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_freq_points</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fdot_grid_spec</span> <span class="o">=</span> <span class="n">fdot_grid_spec</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fddot_grid_spec</span> <span class="o">=</span> <span class="n">fddot_grid_spec</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fddot_grid_spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">fdot_grid_spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> \
+                <span class="s2">&quot;fdot_grid_spec must be provided if fddot_grid_spec is.&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_vals</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nt</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m_vals</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nf</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">alt</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_vals</span><span class="p">[:,</span><span class="n">jnp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">m_vals</span><span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,:])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_pixels</span> <span class="o">=</span> <span class="n">num_pixels</span> <span class="k">if</span> <span class="n">num_pixels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nf</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_pixels</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nf</span><span class="p">,</span> \
+            <span class="s2">&quot;num_pixels cannot be larger than wdm.Nf.&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m_pixel_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_ref</span> <span class="o">-</span> \
+                                <span class="bp">self</span><span class="o">.</span><span class="n">num_pixels</span><span class="o">//</span><span class="mi">2</span> <span class="o">+</span> \
+                                    <span class="n">jnp</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_pixels</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_pixels</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nf</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">jnp</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">jnp</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_pixel_range</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">m_vals</span><span class="p">)),</span> \
+                <span class="s2">&quot;I&#39;ve messed up!&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask_n_even</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_vals</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask_n_even</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_n_even</span><span class="p">,</span> 
+                                     <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_vals</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">grids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_grids</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_shape</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">grid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">)</span>
+
+        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cnm_interp</span><span class="p">,</span> 
+         <span class="bp">self</span><span class="o">.</span><span class="n">snm_interp</span><span class="p">,</span> 
+         <span class="bp">self</span><span class="o">.</span><span class="n">chatnm_interp</span><span class="p">,</span> 
+         <span class="bp">self</span><span class="o">.</span><span class="n">shatnm_interp</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_interpolators</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Transformer.make_grids">
+<a class="viewcode-back" href="../../../api/TimeFrequencyWaveforms.code.TD_to_TFD_transform.html#TimeFrequencyWaveforms.code.TD_to_TFD_transform.Transformer.make_grids">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_grids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Make the regular grid for interpolation.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        grids : jnp.ndarray</span>
+<span class="sd">            The grid points for interpolation, shape=(num_freq_points, ...).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dim</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">f_grid</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">f_grid_spec</span><span class="p">)</span>
+        <span class="n">grids</span> <span class="o">=</span> <span class="p">(</span><span class="n">f_grid</span><span class="p">,</span> <span class="p">)</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fdot_grid_spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dim</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">fdot_grid</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">fdot_grid_spec</span><span class="p">)</span>
+            <span class="n">grids</span> <span class="o">+=</span> <span class="p">(</span><span class="n">fdot_grid</span><span class="p">,</span> <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fddot_grid_spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dim</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">fddot_grid</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">fddot_grid_spec</span><span class="p">)</span>
+            <span class="n">grids</span> <span class="o">+=</span> <span class="p">(</span><span class="n">fddot_grid</span><span class="p">,</span> <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">grids</span></div>
+
+    
+<div class="viewcode-block" id="Transformer.make_interpolators">
+<a class="viewcode-back" href="../../../api/TimeFrequencyWaveforms.code.TD_to_TFD_transform.html#TimeFrequencyWaveforms.code.TD_to_TFD_transform.Transformer.make_interpolators">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_interpolators</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">RegularGridInterpolator</span><span class="p">,</span>
+                                          <span class="n">RegularGridInterpolator</span><span class="p">,</span>
+                                          <span class="n">RegularGridInterpolator</span><span class="p">,</span>
+                                          <span class="n">RegularGridInterpolator</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create interpolators for the coefficients cnm, snm, chatnm and shatnm.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        interpolators : tuple</span>
+<span class="sd">            Four interpolators for cnm, snm, chatnm, shatnm. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cos_data</span>     <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid_shape</span><span class="o">+</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_pixels</span><span class="p">,))</span>
+        <span class="n">sin_data</span>     <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid_shape</span><span class="o">+</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_pixels</span><span class="p">,))</span>
+        <span class="n">cos_hat_data</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid_shape</span><span class="o">+</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_pixels</span><span class="p">,))</span>
+        <span class="n">sin_hat_data</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid_shape</span><span class="o">+</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_pixels</span><span class="p">,))</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">f_ref</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">fdot</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="n">fddot</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="k">for</span> <span class="n">m_</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_pixel_range</span><span class="p">):</span>
+                    <span class="n">cos_data</span>     <span class="o">=</span> <span class="n">cos_data</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">m_</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">cnm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="p">,</span> 
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">n_ref</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">fdot</span><span class="p">,</span> <span class="n">fddot</span><span class="p">))</span>
+                    <span class="n">sin_data</span>     <span class="o">=</span> <span class="n">sin_data</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">m_</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">snm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="p">,</span> 
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">n_ref</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">fdot</span><span class="p">,</span> <span class="n">fddot</span><span class="p">))</span>
+                    <span class="n">cos_hat_data</span> <span class="o">=</span> <span class="n">cos_hat_data</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">m_</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">chatnm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="p">,</span> 
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">n_ref</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">fdot</span><span class="p">,</span> <span class="n">fddot</span><span class="p">))</span>
+                    <span class="n">sin_hat_data</span> <span class="o">=</span> <span class="n">sin_hat_data</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">m_</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">shatnm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="p">,</span> 
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">n_ref</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">fdot</span><span class="p">,</span> <span class="n">fddot</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">fdot</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="n">fddot</span> <span class="o">=</span> <span class="mf">0.0</span>
+                    <span class="k">for</span> <span class="n">m_</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_pixel_range</span><span class="p">):</span>
+                        <span class="n">cos_data</span>     <span class="o">=</span> <span class="n">cos_data</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">m_</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">cnm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="p">,</span> 
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">n_ref</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">fdot</span><span class="p">,</span> <span class="n">fddot</span><span class="p">))</span>
+                        <span class="n">sin_data</span>     <span class="o">=</span> <span class="n">sin_data</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">m_</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">snm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="p">,</span> 
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">n_ref</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">fdot</span><span class="p">,</span> <span class="n">fddot</span><span class="p">))</span>
+                        <span class="n">cos_hat_data</span> <span class="o">=</span> <span class="n">cos_hat_data</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">m_</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">chatnm</span><span class="p">(</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_ref</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> 
+                                                <span class="n">f</span><span class="p">,</span> <span class="n">fdot</span><span class="p">,</span> <span class="n">fddot</span><span class="p">))</span>
+                        <span class="n">sin_hat_data</span> <span class="o">=</span> <span class="n">sin_hat_data</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">m_</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">shatnm</span><span class="p">(</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_ref</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> 
+                                                <span class="n">f</span><span class="p">,</span> <span class="n">fdot</span><span class="p">,</span> <span class="n">fddot</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">fdot</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">fddot</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
+                        <span class="k">for</span> <span class="n">m_</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m_pixel_range</span><span class="p">):</span>
+                            <span class="n">cos_data</span>     <span class="o">=</span> <span class="n">cos_data</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">m_</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">cnm</span><span class="p">(</span>
+                                                    <span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_ref</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> 
+                                                    <span class="n">f</span><span class="p">,</span> <span class="n">fdot</span><span class="p">,</span> <span class="n">fddot</span><span class="p">))</span>
+                            <span class="n">sin_data</span>     <span class="o">=</span> <span class="n">sin_data</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">m_</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">snm</span><span class="p">(</span>
+                                                    <span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_ref</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> 
+                                                    <span class="n">f</span><span class="p">,</span> <span class="n">fdot</span><span class="p">,</span> <span class="n">fddot</span><span class="p">))</span>
+                            <span class="n">cos_hat_data</span> <span class="o">=</span> <span class="n">cos_hat_data</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">m_</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">chatnm</span><span class="p">(</span>
+                                                    <span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_ref</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> 
+                                                    <span class="n">f</span><span class="p">,</span> <span class="n">fdot</span><span class="p">,</span> <span class="n">fddot</span><span class="p">))</span>
+                            <span class="n">sin_hat_data</span> <span class="o">=</span> <span class="n">sin_hat_data</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">m_</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">shatnm</span><span class="p">(</span>
+                                                    <span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_ref</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> 
+                                                    <span class="n">f</span><span class="p">,</span> <span class="n">fdot</span><span class="p">,</span> <span class="n">fddot</span><span class="p">))</span>
+
+        <span class="n">cnm_interp</span> <span class="o">=</span> <span class="n">RegularGridInterpolator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">,</span> <span class="n">cos_data</span><span class="p">,</span> 
+                                             <span class="n">method</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> 
+                                             <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                                             <span class="n">fill_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">snm_interp</span> <span class="o">=</span> <span class="n">RegularGridInterpolator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">,</span> <span class="n">sin_data</span><span class="p">,</span> 
+                                             <span class="n">method</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> 
+                                             <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                                             <span class="n">fill_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">chatnm_interp</span> <span class="o">=</span> <span class="n">RegularGridInterpolator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">,</span> <span class="n">cos_hat_data</span><span class="p">,</span> 
+                                             <span class="n">method</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> 
+                                             <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                                             <span class="n">fill_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        <span class="n">shatnm_interp</span> <span class="o">=</span> <span class="n">RegularGridInterpolator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grids</span><span class="p">,</span> <span class="n">sin_hat_data</span><span class="p">,</span> 
+                                             <span class="n">method</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> 
+                                             <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                                             <span class="n">fill_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+        
+        <span class="n">interpolators</span> <span class="o">=</span> <span class="p">(</span><span class="n">cnm_interp</span><span class="p">,</span> <span class="n">snm_interp</span><span class="p">,</span> <span class="n">chatnm_interp</span><span class="p">,</span> <span class="n">shatnm_interp</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">interpolators</span></div>
+
+    
+<div class="viewcode-block" id="Transformer.coeffs">
+<a class="viewcode-back" href="../../../api/TimeFrequencyWaveforms.code.TD_to_TFD_transform.html#TimeFrequencyWaveforms.code.TD_to_TFD_transform.Transformer.coeffs">[docs]</a>
+    <span class="nd">@partial</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnums</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">coeffs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+               <span class="n">F</span> <span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+               <span class="n">fdot</span> <span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+               <span class="n">fddot</span> <span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                                                  <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                                                  <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                                                  <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Interpolate to get the coefficients at given parameters.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        F : jnp.ndarray</span>
+<span class="sd">            Frequencies, shape=(Nt,).</span>
+<span class="sd">        fdot : jnp.ndarray</span>
+<span class="sd">            Frequency derivatives, shape=(Nt,).</span>
+<span class="sd">        fddot : jnp.ndarray</span>
+<span class="sd">            Frequency second derivatives, shape=(Nt,).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        values : tuple</span>
+<span class="sd">            The quantities. Each of these are jnp.ndarray with shape=(Nt, Nf).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">F</span><span class="p">,</span> <span class="n">fdot</span><span class="p">,</span> <span class="n">fddot</span><span class="p">]</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+        <span class="n">CNM</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nf</span><span class="p">))</span>
+        <span class="n">SNM</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nf</span><span class="p">))</span>
+        <span class="n">CHATNM</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nf</span><span class="p">))</span>
+        <span class="n">SHATNM</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="o">.</span><span class="n">Nf</span><span class="p">))</span>
+
+        <span class="n">CNM</span> <span class="o">=</span> <span class="n">CNM</span><span class="o">.</span><span class="n">at</span><span class="p">[:,</span><span class="bp">self</span><span class="o">.</span><span class="n">m_pixel_range</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cnm_interp</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
+        <span class="n">SNM</span> <span class="o">=</span> <span class="n">SNM</span><span class="o">.</span><span class="n">at</span><span class="p">[:,</span><span class="bp">self</span><span class="o">.</span><span class="n">m_pixel_range</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">snm_interp</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
+        <span class="n">CHATNM</span> <span class="o">=</span> <span class="n">CHATNM</span><span class="o">.</span><span class="n">at</span><span class="p">[:,</span><span class="bp">self</span><span class="o">.</span><span class="n">m_pixel_range</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chatnm_interp</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
+        <span class="n">SHATNM</span> <span class="o">=</span> <span class="n">SHATNM</span><span class="o">.</span><span class="n">at</span><span class="p">[:,</span><span class="bp">self</span><span class="o">.</span><span class="n">m_pixel_range</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shatnm_interp</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
+
+        <span class="c1">#CNM = self.cnm_interp(query)</span>
+        <span class="c1">#SNM = self.snm_interp(query)</span>
+        <span class="c1">#CHATNM = self.chatnm_interp(query)</span>
+        <span class="c1">#SHATNM = self.shatnm_interp(query)</span>
+
+        <span class="n">CNM_shifted</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_n_even</span><span class="p">,</span> <span class="n">CNM</span><span class="p">,</span> <span class="n">CHATNM</span><span class="p">)</span>
+        <span class="n">SNM_shifted</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_n_even</span><span class="p">,</span> <span class="n">SNM</span><span class="p">,</span> <span class="n">SHATNM</span><span class="p">)</span>
+        <span class="n">CHATNM_shifted</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_n_even</span><span class="p">,</span> <span class="n">CHATNM</span><span class="p">,</span> <span class="n">CNM</span><span class="p">)</span>
+        <span class="n">SHATNM_shifted</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_n_even</span><span class="p">,</span> <span class="n">SHATNM</span><span class="p">,</span> <span class="n">SNM</span><span class="p">)</span>
+
+        <span class="n">values</span> <span class="o">=</span> <span class="p">(</span><span class="n">CNM_shifted</span><span class="p">,</span> <span class="n">SNM_shifted</span><span class="p">,</span> <span class="n">CHATNM_shifted</span><span class="p">,</span> <span class="n">SHATNM_shifted</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">values</span></div>
+
+    
+<div class="viewcode-block" id="Transformer.cnm_snm">
+<a class="viewcode-back" href="../../../api/TimeFrequencyWaveforms.code.TD_to_TFD_transform.html#TimeFrequencyWaveforms.code.TD_to_TFD_transform.Transformer.cnm_snm">[docs]</a>
+    <span class="nd">@partial</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnums</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cnm_snm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                <span class="n">A_n</span> <span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+                <span class="n">phi_n</span> <span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+                <span class="n">f_n</span> <span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+                <span class="n">fdot_n</span> <span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                <span class="n">fddot_n</span> <span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                                                    <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                                                    <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                                                    <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transformer.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        A_n : jnp.ndarray</span>
+<span class="sd">            The waveform amplitude :math:`A(t_n)` evaluated at the sparse </span>
+<span class="sd">            wavelet times :math:`t_n = n \Delta T`.</span>
+<span class="sd">        phi_n : jnp.ndarray</span>
+<span class="sd">            The waveform phase :math:`\Phi(t_n)` [rad] evaluated at the sparse </span>
+<span class="sd">            wavelet times :math:`t_n = n \Delta T`.</span>
+<span class="sd">        f_n : jnp.ndarray</span>
+<span class="sd">            The waveform frequency :math:`f(t_n)` [Hz] evaluated at the sparse </span>
+<span class="sd">            wavelet times :math:`t_n = n \Delta T`.</span>
+<span class="sd">        fdot_n : jnp.ndarray</span>
+<span class="sd">            The frequency derivative :math:`\dot{f}(t_n)` [Hz/s] </span>
+<span class="sd">            evaluated at the sparse wavelet times :math:`t_n = n \Delta T`.</span>
+<span class="sd">        fddot : jnp.ndarray</span>
+<span class="sd">            The frequency second derivative :math:`\ddot{f}(t_n)` [Hz/s] </span>
+<span class="sd">            evaluated at the sparse wavelet times :math:`t_n = n \Delta T`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        CNM, SNM, CHATNM, SHATNM</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">F_n_minus_f_ref</span> <span class="o">=</span> <span class="p">(</span><span class="n">f_n</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">f_ref</span><span class="p">)</span><span class="o">%</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="o">.</span><span class="n">dF</span><span class="p">)</span>
+        <span class="n">z_n</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">f_n</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">f_ref</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="o">.</span><span class="n">dF</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="n">CNM</span><span class="p">,</span> <span class="n">SNM</span><span class="p">,</span> <span class="n">CHATNM</span><span class="p">,</span> <span class="n">SHATNM</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">(</span><span class="n">F_n_minus_f_ref</span><span class="p">,</span> 
+                                               <span class="n">fdot_n</span><span class="p">,</span> <span class="n">fddot_n</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">CNM</span><span class="p">,</span> <span class="n">SNM</span><span class="p">,</span> <span class="n">CHATNM</span><span class="p">,</span> <span class="n">SHATNM</span></div>
+
+    
+<div class="viewcode-block" id="Transformer.transform">
+<a class="viewcode-back" href="../../../api/TimeFrequencyWaveforms.code.TD_to_TFD_transform.html#TimeFrequencyWaveforms.code.TD_to_TFD_transform.Transformer.transform">[docs]</a>
+    <span class="nd">@partial</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">,</span> <span class="n">static_argnums</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                  <span class="n">A_n</span> <span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+                  <span class="n">phi_n</span> <span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+                  <span class="n">f_n</span> <span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> 
+                  <span class="n">fdot_n</span> <span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                  <span class="n">fddot_n</span> <span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Transformer.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        A_n : jnp.ndarray</span>
+<span class="sd">            The waveform amplitude :math:`A(t_n)` evaluated at the sparse </span>
+<span class="sd">            wavelet times :math:`t_n = n \Delta T`.</span>
+<span class="sd">        phi_n : jnp.ndarray</span>
+<span class="sd">            The waveform phase :math:`\Phi(t_n)` [rad] evaluated at the sparse </span>
+<span class="sd">            wavelet times :math:`t_n = n \Delta T`.</span>
+<span class="sd">        f_n : jnp.ndarray</span>
+<span class="sd">            The waveform frequency :math:`f(t_n)` [Hz] evaluated at the sparse </span>
+<span class="sd">            wavelet times :math:`t_n = n \Delta T`.</span>
+<span class="sd">        fdot_n : jnp.ndarray</span>
+<span class="sd">            The frequency derivative :math:`\dot{f}(t_n)` [Hz/s] </span>
+<span class="sd">            evaluated at the sparse wavelet times :math:`t_n = n \Delta T`.</span>
+<span class="sd">        fddot : jnp.ndarray</span>
+<span class="sd">            The frequency second derivative :math:`\ddot{f}(t_n)` [Hz/s] </span>
+<span class="sd">            evaluated at the sparse wavelet times :math:`t_n = n \Delta T`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        wnm : jnp.ndarray</span>
+<span class="sd">            The wavelet coefficients of the waveform; the real part if the plus</span>
+<span class="sd">            polarisation, the imaginary part is the cross polarisation.</span>
+<span class="sd">            Array shape=(self.wdm.Nt, self.wdm.Nf), dtype=complex.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">F_n_minus_f_ref</span> <span class="o">=</span> <span class="p">(</span><span class="n">f_n</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">f_ref</span><span class="p">)</span><span class="o">%</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="o">.</span><span class="n">dF</span><span class="p">)</span>
+        <span class="n">z_n</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">f_n</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">f_ref</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">wdm</span><span class="o">.</span><span class="n">dF</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="n">CNM</span><span class="p">,</span> <span class="n">SNM</span><span class="p">,</span> <span class="n">CHATNM</span><span class="p">,</span> <span class="n">SHATNM</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coeffs</span><span class="p">(</span><span class="n">F_n_minus_f_ref</span><span class="p">,</span> 
+                                               <span class="n">fdot_n</span><span class="p">,</span> <span class="n">fddot_n</span><span class="p">)</span>
+        
+        <span class="n">cnm</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span> <span class="n">utils</span><span class="o">.</span><span class="n">row_roll</span><span class="p">(</span><span class="n">CNM</span><span class="p">,</span> <span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">z_n</span><span class="p">)</span> <span class="o">+</span>
+                      <span class="n">utils</span><span class="o">.</span><span class="n">row_roll</span><span class="p">(</span><span class="n">CNM</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">z_n</span><span class="p">)</span> <span class="o">+</span>
+                      <span class="bp">self</span><span class="o">.</span><span class="n">alt</span> <span class="o">*</span> <span class="n">utils</span><span class="o">.</span><span class="n">row_roll</span><span class="p">(</span><span class="n">SHATNM</span><span class="p">,</span> <span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">z_n</span><span class="p">)</span> <span class="o">-</span>
+                      <span class="bp">self</span><span class="o">.</span><span class="n">alt</span> <span class="o">*</span> <span class="n">utils</span><span class="o">.</span><span class="n">row_roll</span><span class="p">(</span><span class="n">SHATNM</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">z_n</span><span class="p">)</span> <span class="p">)</span> 
+        
+        <span class="n">snm</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span> <span class="n">utils</span><span class="o">.</span><span class="n">row_roll</span><span class="p">(</span><span class="n">SNM</span><span class="p">,</span> <span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">z_n</span><span class="p">)</span> <span class="o">+</span>
+                      <span class="n">utils</span><span class="o">.</span><span class="n">row_roll</span><span class="p">(</span><span class="n">SNM</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">z_n</span><span class="p">)</span> <span class="o">-</span>
+                      <span class="bp">self</span><span class="o">.</span><span class="n">alt</span> <span class="o">*</span> <span class="n">utils</span><span class="o">.</span><span class="n">row_roll</span><span class="p">(</span><span class="n">CHATNM</span><span class="p">,</span> <span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">z_n</span><span class="p">)</span> <span class="o">+</span>
+                      <span class="bp">self</span><span class="o">.</span><span class="n">alt</span> <span class="o">*</span> <span class="n">utils</span><span class="o">.</span><span class="n">row_roll</span><span class="p">(</span><span class="n">CHATNM</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">z_n</span><span class="p">)</span> <span class="p">)</span> 
+
+        <span class="n">wnm</span> <span class="o">=</span> <span class="p">(</span> <span class="n">A_n</span><span class="p">[:,</span><span class="n">jnp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">*</span> \
+                <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">phi_n</span><span class="p">[:,</span><span class="n">jnp</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span> <span class="o">*</span> \
+                    <span class="p">(</span> <span class="n">cnm</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="p">)</span> <span class="o">*</span> <span class="n">snm</span> <span class="p">)</span> <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">wnm</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Christopher J. Moore.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
