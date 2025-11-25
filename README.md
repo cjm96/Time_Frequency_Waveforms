@@ -48,6 +48,15 @@ Open the local documentation files using your browser.
 open ./docs/build/html/index.html
 ```
 
+If you need to rebuild the `sphinx` docs, then run the following command.
+
+``` bash
+cd ./docs
+make clean
+sphinx-build ./source ./build
+make html
+```
+
 
 # Testing
 
